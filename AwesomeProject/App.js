@@ -17,10 +17,27 @@ const instructions = Platform.select({
 });
 
 type Props = {};
+
+const GoodEvening = (props) => {
+  return (
+    <Text>GoodEvening, {props.name}</Text>
+  )
+}
+
+class GoodMorning extends Component  {
+  render() {
+    return (
+      <Text>GoodMorning! {this.props.name}</Text>
+    )
+  }
+} 
+
 export default class App extends Component<Props> {
   render() {
     return (
       <View style={styles.container}>
+        <GoodEvening name="luna" />
+        <GoodMorning name="luna" />
         <Text style={styles.welcome}>Welcome to React Native By Luna</Text>
         <Text style={styles.instructions}>To get started, edit App.js</Text>
         <Text style={styles.instructions}>{instructions}</Text>
@@ -45,5 +62,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#333333',
     marginBottom: 5,
-  },
+  }
 });
