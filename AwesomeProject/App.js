@@ -65,14 +65,14 @@ class CountDown extends Component {
   }
 
   // 自定义函数
-  renderResult = () => {
-    const { count } = this.state;
-    if (count > 0) {
-      return <Text>{count}</Text>
-    } else {
-      return <Text>时间到！</Text>
-    }
-  }
+  // renderResult = () => {
+  //   const { count } = this.state;
+  //   if (count > 0) {
+  //     return <Text>{count}</Text>
+  //   } else {
+  //     return <Text>时间到！</Text>
+  //   }
+  // }
 
   componentDidMount() {
     this.timer = setInterval(() => {
@@ -93,7 +93,7 @@ class CountDown extends Component {
   render() {
     const { count } = this.state
     return (
-      <View>{this.renderResult()}</View>
+      <View>{count > 0 ? <Text>{count}</Text> : <Text>时间到！</Text>}</View>
     )
   }
 }
