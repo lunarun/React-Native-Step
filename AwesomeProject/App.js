@@ -35,7 +35,8 @@ class GoodMorning extends Component  {
 
 class ClickGood extends Component {
   state = {
-    likes: 0
+    likes: 0,
+    unlikes: 1
   };
   onPress = () => {
     const { likes } = this.state;
@@ -52,7 +53,36 @@ class ClickGood extends Component {
           />
         </TouchableOpacity>
         <Text style={styles.likes}>{this.state.likes}</Text>
+        <Text style={styles.likes}>{this.state.unlikes}</Text>
       </View>
+    )
+  }
+}
+
+class CountDown extends Component {
+  state = {
+    count: 6
+  }
+
+  componentDidMount() {
+    this.timer = setInterval(() => {
+      const { count } = this.state;
+      if (count === 0) {
+        return clearInterval(this.timer);
+      }
+      this.setState({
+        count: count - 1,
+      })
+    }, 1000);
+  }
+
+  componentWillUnmount() {
+    this.timer && clearInterval(this.timer);
+  }
+  
+  render() {
+    return (
+      <Text>{this.state.count}</Text>
     )
   }
 }
@@ -68,6 +98,7 @@ export default class App extends Component<Props> {
           })
         }
         <GoodMorning name="luna" />
+        <CountDown />
         {/* <Text style={styles.welcome}>Welcome to React Native By Luna</Text>
         <Text style={styles.instructions}>To get started, edit App.js</Text>
         <Text style={styles.instructions}>{instructions}</Text> */}
