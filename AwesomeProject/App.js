@@ -7,7 +7,7 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -18,13 +18,14 @@ const instructions = Platform.select({
 
 type Props = {};
 
-const GoodEvening = (props) => {
-  return (
-    <Text>GoodEvening, {props.name}</Text>
-  )
-}
+const names = ['tom', 'jerry', 'kim'];
 
 class GoodMorning extends Component  {
+  // 添加默认值
+  static defaultProps = {
+    name: 'somebody'
+  }
+
   render() {
     return (
       <Text>GoodMorning! {this.props.name}</Text>
@@ -32,15 +33,44 @@ class GoodMorning extends Component  {
   }
 } 
 
+class ClickGood extends Component {
+  state = {
+    likes: 0
+  };
+  onPress = () => {
+    const { likes } = this.state;
+    this.setState({
+      likes: likes + 1
+    });
+  }
+  render () {
+    return (
+      <View>
+        <TouchableOpacity onPress={this.onPress}>
+          <Image style={{width: 50, height: 50}} 
+            source={{uri: 'https://facebook.github.io/react/logo-og.png'}}
+          />
+        </TouchableOpacity>
+        <Text style={styles.likes}>{this.state.likes}</Text>
+      </View>
+    )
+  }
+}
+
 export default class App extends Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <GoodEvening name="luna" />
+        <ClickGood />
+        {
+          names.map((name, index) => {
+            return (<GoodMorning key={index} name={name} />)
+          })
+        }
         <GoodMorning name="luna" />
-        <Text style={styles.welcome}>Welcome to React Native By Luna</Text>
+        {/* <Text style={styles.welcome}>Welcome to React Native By Luna</Text>
         <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+        <Text style={styles.instructions}>{instructions}</Text> */}
       </View>
     );
   }
@@ -62,5 +92,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#333333',
     marginBottom: 5,
+  },
+  likes: {
+    textAlign: 'center'
   }
 });
