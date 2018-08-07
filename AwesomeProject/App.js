@@ -64,6 +64,16 @@ class CountDown extends Component {
     count: 6
   }
 
+  // 自定义函数
+  renderResult = () => {
+    const { count } = this.state;
+    if (count > 0) {
+      return <Text>{count}</Text>
+    } else {
+      return <Text>时间到！</Text>
+    }
+  }
+
   componentDidMount() {
     this.timer = setInterval(() => {
       const { count } = this.state;
@@ -81,8 +91,9 @@ class CountDown extends Component {
   }
   
   render() {
+    const { count } = this.state
     return (
-      <Text>{this.state.count}</Text>
+      <View>{this.renderResult()}</View>
     )
   }
 }
