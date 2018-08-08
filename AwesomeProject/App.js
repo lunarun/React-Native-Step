@@ -102,12 +102,22 @@ class CountDown extends Component {
       count: nextProps.timer
     })
   }
+
+  add = (time) => {
+    this.setState({
+      count: this.state.count + time
+    })
+  }
 }
 
 export default class App extends Component<Props> {
   state = {
     time1: 10,
     time2: 5
+  }
+
+  addTime = () => {
+    this.countDown.add(10);
   }
 
   componentWillMount() {
@@ -128,8 +138,12 @@ export default class App extends Component<Props> {
           })
         }
         <GoodMorning name="luna" />
-        <CountDown timer={this.state.time1} />
-        <CountDown timer={5} />
+        {/* <CountDown timer={this.state.time1} />
+        <CountDown timer={5} /> */}
+        <TouchableOpacity onPress={this.addTime}>
+          <Text>延长10秒</Text>
+        </TouchableOpacity>
+        <CountDown timer={10} ref={countDown => this.countDown = countDown} />
         {/* <Text style={styles.welcome}>Welcome to React Native By Luna</Text>
         <Text style={styles.instructions}>To get started, edit App.js</Text>
         <Text style={styles.instructions}>{instructions}</Text> */}
