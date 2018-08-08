@@ -78,6 +78,7 @@ class CountDown extends Component {
     this.timer = setInterval(() => {
       const { count } = this.state;
       if (count === 0) {
+        this.timeUp()
         return clearInterval(this.timer);
       }
       this.setState({
@@ -108,16 +109,26 @@ class CountDown extends Component {
       count: this.state.count + time
     })
   }
+
+  timeUp = () => {
+    this.props.timeupParent && this.props.timeupParent('子组件传回的参数' + '123')
+  }
 }
 
 export default class App extends Component<Props> {
   state = {
     time1: 10,
-    time2: 5
+    time2: 5,
+    arr: [1,2,3]
   }
 
   addTime = () => {
     this.countDown.add(10);
+  }
+
+  timeupParent = (param, child) => {
+    alert('第一个参数：' + param)
+    alert('第二个参数：' + child)
   }
 
   componentWillMount() {
@@ -138,12 +149,17 @@ export default class App extends Component<Props> {
           })
         }
         <GoodMorning name="luna" />
-        {/* <CountDown timer={this.state.time1} />
-        <CountDown timer={5} /> */}
+        <CountDown timer={this.state.time1} />
+        {/* <CountDown timer={5} /> */}
         <TouchableOpacity onPress={this.addTime}>
           <Text>延长10秒</Text>
         </TouchableOpacity>
         <CountDown timer={10} ref={countDown => this.countDown = countDown} />
+        {
+          this.state.arr.map(i => {
+            return <CountDown timer={5} key={i} timeupParent={(childParam) => this.timeupParent('父组件用于区分的参数' + i, childParam)}></CountDown>
+          })
+        }
         {/* <Text style={styles.welcome}>Welcome to React Native By Luna</Text>
         <Text style={styles.instructions}>To get started, edit App.js</Text>
         <Text style={styles.instructions}>{instructions}</Text> */}
