@@ -61,7 +61,7 @@ class ClickGood extends Component {
 
 class CountDown extends Component {
   state = {
-    count: 6
+    count: this.props.timer
   }
 
   // 自定义函数
@@ -96,9 +96,28 @@ class CountDown extends Component {
       <View>{count > 0 ? <Text>{count}</Text> : <Text>时间到！</Text>}</View>
     )
   }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      count: nextProps.timer
+    })
+  }
 }
 
 export default class App extends Component<Props> {
+  state = {
+    time1: 10,
+    time2: 5
+  }
+
+  componentWillMount() {
+    setTimeout(() => {
+      this.setState({
+        time1: 15
+      })
+    }, 2000);
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -109,7 +128,8 @@ export default class App extends Component<Props> {
           })
         }
         <GoodMorning name="luna" />
-        <CountDown />
+        <CountDown timer={this.state.time1} />
+        <CountDown timer={5} />
         {/* <Text style={styles.welcome}>Welcome to React Native By Luna</Text>
         <Text style={styles.instructions}>To get started, edit App.js</Text>
         <Text style={styles.instructions}>{instructions}</Text> */}
