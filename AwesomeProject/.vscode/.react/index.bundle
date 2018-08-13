@@ -1431,6 +1431,8 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+  _reactNative.YellowBox.ignoreWarnings(["Warning: Can only update"]);
+
   _reactNative.AppRegistry.registerComponent(_app.name, function () {
     return _App2.default;
   });
@@ -80160,7 +80162,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
   var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
   var _class,
-      _temp,
+      _temp2,
       _jsxFileName = "e:\\luna-test\\ReactNativeStep\\AwesomeProject\\src\\pages\\Detail.js";
 
   var _reactNative = _require(_dependencyMap[2], "react-native");
@@ -80194,50 +80196,151 @@ __d(function (global, _require, module, exports, _dependencyMap) {
 
   var api = 'https://api.douban.com/v2/movie/subject';
 
-  var Detail = _wrapComponent("Detail")((_temp = _class = function (_Component) {
+  var Detail = _wrapComponent("Detail")((_temp2 = _class = function (_Component) {
     _inherits(Detail, _Component);
 
     function Detail() {
+      var _ref;
+
+      var _temp, _this, _ret;
+
       _classCallCheck(this, Detail);
 
-      return _possibleConstructorReturn(this, (Detail.__proto__ || Object.getPrototypeOf(Detail)).apply(this, arguments));
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Detail.__proto__ || Object.getPrototypeOf(Detail)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+        data: {},
+        ready: false
+      }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
     _createClass(Detail, [{
+      key: "componentDidMount",
+      value: function componentDidMount() {
+        var textData, jsonData, state, id, rawData;
+        return regeneratorRuntime.async(function componentDidMount$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                textData = void 0, jsonData = void 0;
+                state = this.props.navigation.state;
+                id = state.params.id;
+                _context.prev = 3;
+
+                _reactNative.AsyncStorage.getItem('id', function (error, result) {
+                  alert(result);
+                });
+
+                if (textData) {
+                  _context.next = 12;
+                  break;
+                }
+
+                _context.next = 8;
+                return regeneratorRuntime.awrap(fetch(api + "/" + id));
+
+              case 8:
+                rawData = _context.sent;
+                _context.next = 11;
+                return regeneratorRuntime.awrap(rawData.text());
+
+              case 11:
+                textData = _context.sent;
+
+              case 12:
+                _context.next = 17;
+                break;
+
+              case 14:
+                _context.prev = 14;
+                _context.t0 = _context["catch"](3);
+                alert(_context.t0);
+
+              case 17:
+                jsonData = JSON.parse(textData);
+                jsonData.image = jsonData.images.large.replace('webp', 'jpg');
+
+                _reactNative.AsyncStorage.setItem('id', textData);
+
+                this.setState({
+                  data: jsonData,
+                  ready: true
+                });
+
+              case 21:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, null, this, [[3, 14]]);
+      }
+    }, {
       key: "render",
       value: function render() {
         var navigation = this.props.navigation;
-        var itemId = navigation.getParam('id', 'NO-ID');
+        var _state = this.state,
+            _state$data = _state.data,
+            title = _state$data.title,
+            summary = _state$data.summary,
+            image = _state$data.image,
+            ready = _state.ready;
         var callbackFn = navigation.getParam('callbackFn', {});
         return _react3.default.createElement(
           _reactNative.View,
           {
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 25
+              lineNumber: 74
             }
           },
-          _react3.default.createElement(
-            _reactNative.Text,
+          ready ? _react3.default.createElement(
+            _reactNative.View,
             {
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 26
+                lineNumber: 77
               }
             },
-            "\u8BE6\u60C5\u9875"
-          ),
-          _react3.default.createElement(
-            _reactNative.Text,
-            {
+            _react3.default.createElement(_reactNative.Image, {
+              source: {
+                uri: image
+              },
+              style: styles.image,
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 27
+                lineNumber: 78
               }
-            },
-            "itemId: ",
-            JSON.stringify(itemId)
-          ),
+            }),
+            _react3.default.createElement(
+              _reactNative.Text,
+              {
+                __source: {
+                  fileName: _jsxFileName,
+                  lineNumber: 79
+                }
+              },
+              title
+            ),
+            _react3.default.createElement(
+              _reactNative.Text,
+              {
+                __source: {
+                  fileName: _jsxFileName,
+                  lineNumber: 80
+                }
+              },
+              summary
+            )
+          ) : _react3.default.createElement(_reactNative.ActivityIndicator, {
+            size: "large",
+            style: styles.loading,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 83
+            }
+          }),
           _react3.default.createElement(
             _reactNative.Text,
             {
@@ -80247,7 +80350,7 @@ __d(function (global, _require, module, exports, _dependencyMap) {
               },
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 28
+                lineNumber: 85
               }
             },
             "\u8FD4\u56DE"
@@ -80259,9 +80362,25 @@ __d(function (global, _require, module, exports, _dependencyMap) {
     return Detail;
   }(_react2.Component), _class.navigationOptions = {
     title: '详情页'
-  }, _temp));
+  }, _temp2));
 
   exports.default = Detail;
+
+  var styles = _reactNative.StyleSheet.create({
+    image: {
+      width: 150,
+      height: 222,
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    loading: {
+      marginTop: 100
+    },
+    play: {
+      width: 107,
+      height: 107
+    }
+  });
 },614,[118,179,12],"src\\pages\\Detail.js");
 __d(function (global, _require, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
