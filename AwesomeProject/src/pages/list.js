@@ -13,9 +13,9 @@ import Item from '../components/Item';
 
 const api = "https://api.douban.com/v2/movie/in_theaters";
 
-export default class App extends Component {
+export default class List extends Component {
   static navigationOptions = {
-    // title: '列表页',
+    title: '上映',
     header: null
   };
   state = {
