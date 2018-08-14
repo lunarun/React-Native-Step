@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import {
+  Platform,
   StyleSheet,
   View,
   Text,
   Image,
+  ImageBackground,
   ActivityIndicator,
   AsyncStorage,
   TouchableOpacity,
@@ -31,7 +33,7 @@ export default class Detail extends Component {
 
     try {
       AsyncStorage.getItem('id', (error, result)=>{
-        alert(result);
+        alert('成功获取本地缓存');
       });  // 调试中断代码--待调试
       if (!textData) {
         const rawData = await fetch(`${api}/${id}`);
@@ -62,7 +64,38 @@ export default class Detail extends Component {
       data: jsonData,
       ready: true
     });
+
+    this.fetchVideo(jsonData.mobile_url);
   }
+
+  fetchVideo = async (mobile_url) => {
+    let pageHtml = await fetch(mobile_url);
+    pageHtml = await pageHtml.text();
+    const regex = /href="([\w|\W]*\.mp4)"/;
+    const result = pageHtml.match(regex);
+    if (result && result[1]) {
+      const videoUri = result[1];
+      this.setState({
+        videoUri
+      })
+    }
+  }
+
+  playVideo = () => {
+    const { videoUri } = this.state;
+    if (videoUri) {
+      alert('Linking');
+      Linking.canOpenURL(videoUri).then(supported => {
+        if (!supported) {
+          alert('Can\'t handle url: ' + videoUri);
+        } else {
+          return Linking.openURL(videoUri);
+        }
+      }).catch(err => console.error('An error occurred', err));
+    } else {
+      alert("正在获取预告片地址，请稍后重试");
+    }
+  };
 
   render() {
     const { navigation } = this.props;
@@ -74,7 +107,12 @@ export default class Detail extends Component {
         {
           ready ? 
             <View>
-              <Image source={{ uri: image }} style={styles.image} />
+              <TouchableOpacity onPress={this.playVideo}>
+                <ImageBackground  source={{ uri: image }} style={styles.image} >
+                  <Image source={require('../img/play-icon.png')} style={styles.play} />
+                </ImageBackground>
+              </TouchableOpacity>
+              
               <Text>{title}</Text>
               <Text>{summary}</Text>
             </View>
@@ -96,6 +134,7 @@ const styles = StyleSheet.create({
     height: 222,
     justifyContent: 'center',
     alignItems: 'center',
+    overflow: 'visible'
   },
   loading: {
     marginTop: 100,
@@ -103,5 +142,8 @@ const styles = StyleSheet.create({
   play: {
     width: 107,
     height: 107,
+    position: 'absolute',
+    bottom: -50,
+    right: -50,
   }
 });
